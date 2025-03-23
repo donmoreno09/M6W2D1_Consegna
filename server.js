@@ -48,7 +48,56 @@ app.get('/users/age26', async (request, response) => {
     } 
 });
 
+// age > 26 e <= 30
+app.get('/users/age-between', async (request, response) => {
+    try {
+        const users = await User.find({ age: { $gt: 26, $lte: 30 } });
+        response.json(users);
+    } catch (error) {
+        response.status(500).json({message : error.message})
+    } 
+});
+
+// eyes brown o blue
+app.get('/users/eyes-brown-blue', async (request, response) => {
+    try {
+        const users = await User.find({ eyeColor: { $in: ['brown', 'blue'] } });
+        response.json(users);
+    } catch (error) {
+        response.status(500).json({message : error.message})
+    } 
+});
+
+// eyes non è green
+app.get('/users/eyes-not-green', async (request, response) => {
+    try {
+        const users = await User.find({ eyeColor: { $ne: 'green' } });
+        response.json(users);
+    } catch (error) {
+        response.status(500).json({message : error.message})
+    } 
+});
+
+// eyes non è green e non è blue
+app.get('/users/eyes-not-green-blue', async (request, response) => {
+    try {
+        const users = await User.find({ eyeColor: { $nin: ['green', 'blue'] } });
+        response.json(users);
+    } catch (error) {
+        response.status(500).json({message : error.message})
+    } 
+});
+
+// company uguale a FITCORE e ritorna solo l'email
+app.get('/users/fitcore-email', async (request, response) => {
+    try {
+        const users = await User.find({ company: "FITCORE" }).select('email');
+        response.json(users);
+    } catch (error) {
+        response.status(500).json({message : error.message})
+    } 
+});
 
 app.listen(PORT, () => {
-    console.log("Server running on port " + PORT); 
-})
+    console.log("Server running on port " + PORT);
+});
